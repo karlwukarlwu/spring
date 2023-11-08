@@ -1,0 +1,11 @@
+  <!--配置Monster对象
+    1. 如果bean指定了 abstract="true", 表示该bean对象, 是用于被继承
+    2. 本身这个bean就不能被获取/实例化
+    -->
+    <bean id="monster12" class="com.hspedu.spring.bean.Monster" abstract="true">
+        <property name="monsterId" value="100"/>
+        <property name="name" value="蜈蚣精~"/>
+        <property name="skill" value="蜇人~"/>
+    </bean>
+
+    <bean id="monster13" class="com.hspedu.spring.bean.Monster" parent="monster12"/>

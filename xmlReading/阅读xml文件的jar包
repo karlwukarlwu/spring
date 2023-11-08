@@ -1,0 +1,8 @@
+用dom4j jar包
+
+使用xml解析
+读取xml文件
+得到monster对象的id,classPath属性
+使用反射创建对象
+放入hashMap中
+提供一个get方法

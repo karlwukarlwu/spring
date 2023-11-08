@@ -1,0 +1,66 @@
+对于基本数据类型的属性，Spring允许你使用`@Value`注解来注入值。这些值可以来自于各种来源，如属性文件、系统属性、环境变量或静态字面量。下面是一些例子说明如何使用`@Value`注解来给基本数据类型的属性赋值：
+
+1. **字面量**:
+   直接在注解中提供一个字面量值。
+
+   ```java
+   @Value("100")
+   private int number;
+   ```
+
+2. **属性文件中的值**:
+   如果你有一个`application.properties`文件，并且在其中定义了一些属性，你可以使用`${...}`语法来注入这些值。
+
+   ```java
+   // application.properties
+   // app.timeout=500
+
+   @Value("${app.timeout}")
+   private int timeout;
+   ```
+
+3. **系统属性**:
+   你可以注入由JVM定义的系统属性。
+
+   ```java
+   @Value("${java.home}")
+   private String javaHome;
+   ```
+
+4. **环境变量**:
+   也可以注入环境变量。
+
+   ```java
+   @Value("${PATH}")
+   private String path;
+   ```
+
+5. **表达式计算**:
+   Spring的`@Value`注解还支持SpEL（Spring表达式语言），允许你进行更复杂的操作。
+
+   ```java
+   @Value("#{systemProperties['user.region']}")
+   private String userRegion;
+   ```
+
+6. **默认值**:
+   如果你想为某个属性设置一个默认值，可以在`${...}`语法中使用`:`后面跟上默认值。
+
+   ```java
+   @Value("${some.missing.property:defaultValue}")
+   private String somePropertyWithDefault;
+   ```
+
+在注入基本数据类型值时，如果从配置中获取的值类型与属性的基本数据类型不匹配，Spring会尝试进行适当的类型转换。例如，如果属性是整型，但配置值是字符串形式的数字，Spring会将字符串转换为整数。
+
+确保在使用`@Value`注解时，已经正确配置了属性文件的位置，通常是在Spring配置类上使用`@PropertySource`注解来指定。
+
+```java
+@Configuration
+@PropertySource("classpath:application.properties")
+public class AppConfig {
+    // ...
+}
+```
+
+这样Spring就知道在哪里查找属性文件，并从中加载值。

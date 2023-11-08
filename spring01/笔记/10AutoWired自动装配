@@ -1,0 +1,35 @@
+public class UserAction {
+    //xml配置 ref
+    //老师说明 @Autowired
+    //1)在IOC容器中查找待装配的组件的类型，
+    //  如果有唯一的bean匹配(按照类型)，则使用该bean装配，甚至bean都不用配
+    //2)如待装配的类型对应的bean在IOC容器中有多个，则使用待装配的属性的属性名作为id值再进行查找,
+    //  找到就装配，找不到就抛异常
+    @Autowired
+     private UserService userService400;
+
+    public void sayOk() {
+        System.out.println("UserAction 的sayOk()");
+        System.out.println("userAction 装配的 userService属性=" + userService400);
+        userService400.hi();
+    }
+}
+
+
+这种情况下要不然就默认一个对应类型的bean，要不然就是id名对应的bean
+    <context:component-scan
+            base-package="com.hspedu.spring.component"/>
+
+    <!--配置两个UserService对象-->
+<!--    多个bean的情况下autowire注解就会匹配id名 如果匹配不到就报错-->
+<!--    <bean class="com.hspedu.spring.component.UserService" id="userService200"/>-->
+<!--    <bean class="com.hspedu.spring.component.UserService" id="userService300"/>-->
+
+另一种搭配方法
+     //老师说明： @Autowired + @Qualifier(value = "userService02") 组合也可以完成指定 name/id 来进行自动装配
+        //指定id进行组装, 也可以使用@Autowired 和 @Qualifier(value = "userService02")
+        //  @Autowired
+        //  @Qualifier(value = "userService02")
+        //  private UserService userService;
+
+        // 这时，是装配的 id=userService02 , 需要两个注解都需要写上

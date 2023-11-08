@@ -1,0 +1,16 @@
+生成id用debug看
+
+不写id是这样的
+：系统会默认分配id ,分配id 的规则是全类名#0 , 全类名#1 这样的规则来分配id ，
+我们可以通过debug 方式来查看.
+
+public class wk01 {
+    @Test
+    public void test01() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("beans.xml");
+//         不写id 默认全类名#0，#1 。。。这样配置
+        Monster bean = ioc.getBean("bean.Monster#0", Monster.class);
+        System.out.println("bean = " + bean);
+    }
+
+}

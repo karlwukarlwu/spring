@@ -1,0 +1,17 @@
+ClassPathXmlApplicationContext ioc =
+new ClassPathXmlApplicationContext("beans.xml");
+为什么读取到beans.xml文件
+
+
+
+用这个可以看到你的类的加载路径
+通过这个拿到加载文件的位置
+    这里是实际上读到的文件
+        file=C:\Users\23584\Desktop\IDEAUtf-8\spring\spring01\out\production\spring01
+  @Test
+    public void classPath() {
+
+        File file = new File(this.getClass().getResource("/").getPath());
+        //看到类的加载路径
+        System.out.println("file=" + file);
+    }

@@ -1,0 +1,25 @@
+baseDAO
+    继承
+      BookDAO
+
+baseService
+    继承
+      BookService
+
+
+baseService
+public class BaseService<T> {
+    @Autowired
+    private BaseDao<T> baseDao;
+//    还是得用类型来找 用name会报错
+
+    public void save() {
+        baseDao.save();
+    }
+}
+
+当我们调用BookService的save方法时，会调用BookDao的save方法
+    即使我们没有在BookService中定义
+    逻辑是这样的
+
+    BookService.save() -> BaseService.save() -> BaseDAO().save() -> BookDao.save()

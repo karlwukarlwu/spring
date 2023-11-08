@@ -1,0 +1,24 @@
+如果说我们一个数组 多个bean都想用这个数组 怎么办
+对象的结构
+    public class BookStore {
+        //书
+        private List<String> bookList;
+        }
+
+用util空间来实现
+
+ <!--定义一个util:list 并且指定id 可以达到数据复用
+    老师说明: 在使用util:list 名称空间时候，需要引入相应的标签, 一般来说通过alt+enter会自动加入
+    , 如果没有就手动添加一下即可.
+    -->
+    <util:list id="myBookList">
+        <value>三国演义</value>
+        <value>红楼梦</value>
+        <value>西游记</value>
+        <value>水浒传</value>
+    </util:list>
+    <!--配置BookStore对象-->
+
+    <bean class="com.hspedu.spring.bean.BookStore" id="bookStore">
+        <property name="bookList" ref="myBookList"/>
+    </bean>

@@ -1,0 +1,48 @@
+泛型类：
+泛型类是在类名后面添加一对尖括号<>，里面放置一个类型参数的类。
+
+java
+Copy code
+public class Box<T> {
+    private T t; // T stands for "Type"
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public T get() {
+        return t;
+    }
+}
+
+在Java中，泛型类确实不能有静态成员（字段或方法）使用该类的类型参数，但是泛型类可以包含其自己的静态泛型方法。这些静态泛型方法不能使用类定义时声明的类型参数，它们需要声明自己的类型参数。
+
+下面是一个展示了这一点的例子：
+
+```java
+public class GenericClass<T> {
+    // 静态字段不能使用类的泛型类型参数T
+    // private static T staticField; // 错误！
+
+    // 非静态字段可以使用类的泛型类型参数T
+    private T instanceField;
+
+    // 这个静态方法不能使用类的泛型类型参数T，但它可以定义它自己的类型参数S
+    public static <S> void staticGenericMethod(S parameter) {
+        System.out.println(parameter);
+    }
+
+    // 实例方法可以使用类的泛型类型参数T
+    public T getInstanceField() {
+        return instanceField;
+    }
+
+    public void setInstanceField(T instanceField) {
+        this.instanceField = instanceField;
+    }
+}
+```
+
+在上面的代码中，`staticGenericMethod` 是一个静态的泛型方法，它声明了自己的类型参数 `S`。它不使用泛型类 `GenericClass` 的类型参数 `T`。
+
+要注意的关键点是，静态上下文中的代码不能访问类级别的类型参数，因为静态成员与类的具体实例无关，而类型参数是与具体的实例相关的。当你实例化一个泛型类型时，每个实例可以有不同的类型参数值，而静态成员没有这样的特定实例上下文。

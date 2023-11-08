@@ -1,0 +1,22 @@
+ @After(value = "execution(public void Car.run())")
+    public void ok4(JoinPoint joinPoint) {
+
+        Signature signature = joinPoint.getSignature();
+        System.out.println("切面类的ok4()-执行的目标方法-" + signature.getName());
+
+        //演示一下JoinPoint常用的方法.
+        joinPoint.getSignature().getName(); // 获取目标方法名
+
+        joinPoint.getSignature().getDeclaringType().getSimpleName(); // 获取目标方法所属类的简单类名
+
+        joinPoint.getSignature().getDeclaringTypeName(); // 获取目标方法所属类的类名
+
+        joinPoint.getSignature().getModifiers(); // 获取目标方法声明类型(public、private、protected)
+
+        Object[] args = joinPoint.getArgs(); // 获取传入目标方法的参数，返回一个数组
+
+        joinPoint.getTarget(); // 获取被代理的对象 传入的对象
+
+        joinPoint.getThis(); // 获取代理对象自己 父类或者接口生成的proxy对象
+
+    }

@@ -1,0 +1,92 @@
+结构图：
+    orderAction
+        orderService
+            order
+orderAction
+    含属性orderService
+    orderService
+        含属性order
+        order
+            含属性username
+
+xml自动装配
+1. 有两种自动装配
+    1.1 byType
+        1.1.1 会自动在容器中找到和属性类型相同的对象，如果有多个配置信息，就报错
+             <bean class="com.hspedu.spring.dao.OrderDao" id="orderDao">
+                        <property name="username" value="1001"/>
+                    </bean>
+             <bean class="com.hspedu.spring.dao.OrderDao" id="orderDao2">
+                        <property name="username" value="1001"/>
+                    </bean>
+                      <!-- 👆这种情况下autowire=byType会报错 因为配置了两个相同的类型对象-->
+             <bean autowire="byType" class="com.hspedu.spring.service.OrderService"
+                           id="orderService2"/>
+
+               1. autowire="byType" 表示 在创建 orderService时
+                     通过类型的方式 给对象属性 自动完成赋值/引用
+               2. 比如OrderService 对象有 private OrderDao orderDao
+                     如果有多个 则全部给 orderDao 这个类的属性赋相同的值
+                     如何验证
+                        当orderService中有两个
+                             private OrderDao orderDao;
+                             private OrderDao orderDao2;
+                             通过autowire="byType" 会给两个属性赋相同值
+                                即orderDao 和 orderDao2 都是同一个对象
+
+      1.2 byName
+            7. 如果我们设置的是 autowire="byName" 表示通过名字完成自动装配
+            8. 比如下面的 autowire="byName" class="com.hspedu.spring.service.OrderService"
+               1) 先看 OrderService 属性 private OrderDao orderDao
+               2) 再根据这个属性的setXxx()方法的 xxx 来找对象id
+                    实际上是根据 set方法的后面那段来找id
+                    什么意思?
+                     xml配置的id
+                        id="orderService2"
+                        setter和属性名不同
+                        public void setOrderService2(OrderService orderService) {
+                                this.orderService = orderService;
+                        }
+                 这样依然可以成功赋值
+
+               3) public void setOrderDao() 就会找id=orderDao对象来进行自动装配
+
+               4) 如果没有就装配失败
+
+        -->
+        <bean autowire="byType" class="com.hspedu.spring.service.OrderService"
+              id="orderService2"/>
+              👆 这个id 对应的是orderAction的setter方法,而不是属性名
+                    public void setOrderService2(OrderService orderService) {
+                            this.orderService = orderService;
+                        }
+
+        <!--配置OrderAction-->
+        <bean autowire="byName" class="com.hspedu.spring.web.OrderAction" id="orderAction"/>
+
+     测试验证
+         //通过自动装配来对属性赋值
+         @Test
+         public void setBeanByAutowire() {
+
+             ApplicationContext ioc =
+                     new ClassPathXmlApplicationContext("beans03.xml");
+
+
+             OrderAction orderAction = ioc.getBean("orderAction", OrderAction.class);
+
+             //验证是否自动装配上OrderService
+             System.out.println(orderAction.getOrderService());
+             OrderService orderService = orderAction.getOrderService();
+             //这里测的是两个属性但是配置的是同一个对象
+             OrderDao orderDao = orderService.getOrderDao();
+             System.out.println(orderDao);//OrderDao{username='1001'}
+             orderDao.setUsername("jack");
+             OrderDao orderDao2 = orderService.getOrderDao2();
+             System.out.println(orderDao2.getUsername());//jack
+             System.out.println(orderDao2==orderDao);//true
+
+             //验证是否自动装配上OrderDao 这里测的是改id和对应的setter名字
+             System.out.println(orderAction.getOrderService().getOrderDao());
+
+         }

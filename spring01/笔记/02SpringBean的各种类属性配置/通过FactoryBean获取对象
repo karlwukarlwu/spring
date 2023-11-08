@@ -1,0 +1,69 @@
+当我们用FactoryBean获取对象的时候
+    类的配置要继承FactoryBean接口
+    public class MyFactoryBean implements FactoryBean<Monster> {
+
+        //这个就是你配置时候，指定要获取的对象对应key
+        private String key;
+        private Map<String, Monster> monster_map;
+
+        {   //代码块，完成初始化
+            monster_map = new HashMap<>();
+            monster_map.put("monster03", new Monster(300, "牛魔王~", "芭蕉扇~"));
+            monster_map.put("monster04", new Monster(400, "狐狸精~", "美人计~"));
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+    // 这三个override写死就行 最下面的isSingleton()方法true false没细说 感觉没有影响
+        @Override
+        public Monster getObject()  {
+            return monster_map.get(key);
+        }
+    //   返回的类型 和泛型一致即可
+        @Override
+        public Class<?> getObjectType() {
+            //你要返回的类型
+            return Monster.class;
+        }
+
+        //是否单例 true:单例  false:多例 他这里没细讲
+    //    涉及到八股文了 这边跳过
+        @Override
+        public boolean isSingleton() {//这里指定是否返是单例
+            return true;
+        }
+    }
+
+
+配置文件的写法
+        <!--配置monster对象，通过FactoryBean获取
+        老师解读
+        1. class 指定使用的FactoryBean
+        2. key表示就是 MyFactoryBean 属性key
+               private String key;
+        3. value就是你要获取的对象对应key
+               monster_map.put("monster04", new Monster(400, "狐狸精~", "美人计~"));
+        -->
+        <bean id="my_monster05" class="com.hspedu.spring.factory.MyFactoryBean">
+    <!--        这个name是类的一个属性的名字 value是map的key-->
+            <property name="key" value="monster04"/>
+        </bean>
+
+测试的写法
+      @Test
+        public void getBeanByFactoryBean() {
+
+            ApplicationContext ioc =
+                    new ClassPathXmlApplicationContext("beans.xml");
+
+            Monster my_monster05 = ioc.getBean("my_monster05", Monster.class);
+            Monster my_monster051 = ioc.getBean("my_monster05", Monster.class);
+            System.out.println("my_monster05=" + my_monster05);
+            System.out.println("my_monster05=" + my_monster051);
+            System.out.println(my_monster05 == my_monster051);//true
+            👆单不单例基本上不影响这步
+
+        }
+

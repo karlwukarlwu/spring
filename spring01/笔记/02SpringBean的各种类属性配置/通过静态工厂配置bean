@@ -1,0 +1,59 @@
+当我们通过类加载来创建对象并返回时
+这些对象只会随着类加载创建一次
+    这个是静态工厂类
+public class MyStaticFactory {
+    private static Map<String, Monster> monsterMap;
+
+
+    static  {
+        monsterMap = new HashMap<>();
+        monsterMap.put("monster01", new Monster(100,"牛魔王","芭蕉扇"));
+        monsterMap.put("monster02", new Monster(200,"狐狸精","美人计"));
+    }
+
+    //提供一个方法,返回Monster对象
+//    这个方法是static的
+    public static Monster getMonster(String key) {
+        return monsterMap.get(key);
+    }
+
+}
+
+通过这种方式配置对象
+    因为是静态工厂,所以只会创建一次对象
+ <!--配置monster对象,通过静态工厂获取
+    老师解读
+    1. 通过静态工厂获取/配置bean
+    2. class 是静态工厂类的全路径
+    3. factory-method 表示是指定静态工厂类的哪个方法返回对象
+    4. constructor-arg value="monster02" value是指定要返回静态工厂的哪个对象
+    -->
+    <bean id="my_monster01"
+    //类路径
+          class="com.hspedu.spring.factory.MyStaticFactory"
+          //静态工厂获取对象的方法名
+          factory-method="getMonster">
+          //map中的要取出的对象的key
+        <constructor-arg value="monster02"/>
+    </bean>
+
+    <bean id="my_monster04"
+          class="com.hspedu.spring.factory.MyStaticFactory"
+          factory-method="getMonster">
+        <constructor-arg value="monster02"/>
+    </bean>
+
+//测试类
+      @Test
+        public void getBeanByStaticFactory() {
+
+            ApplicationContext ioc =
+                    new ClassPathXmlApplicationContext("beans.xml");
+
+            Monster my_monster01 = ioc.getBean("my_monster01", Monster.class);
+            Monster my_monster04 = ioc.getBean("my_monster04", Monster.class);
+            System.out.println("my_monster01=" + my_monster01);
+            //因为类只加载一次
+            System.out.println(my_monster01 == my_monster04);//true
+
+        }

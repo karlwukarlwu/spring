@@ -1,0 +1,26 @@
+ 如果
+ 这是我们的接口 （这个接口不用加注释让他被扫描进去）
+ public interface UsbInterface {
+     public void work();
+ }
+ 这是实现了接口的类
+ @Component //将Camera注入到spring容器
+ public class Camera implements UsbInterface {
+     @Override
+     public void work() {
+         System.out.println("相机开始工作...");
+     }
+ }
+
+
+ 当我们切面表达式配置的是接口的方法时，那么这个切面表达式会对实现了接口的类/对象生效
+
+    //切入表达式也可以指向接口的方法, 这时切入表达式会对实现了接口的类/对象生效
+    //比如下面我们是对UsbInterface 切入，那么对实现类Phone 和 Camera对象都作用了
+    @Before(value = "execution(public void com.hspedu.spring.aop.aspectj.UsbInterface.work())")
+    public void hi(JoinPoint joinPoint) {
+        Signature signature = joinPoint.getSignature();
+        System.out.println("切面类的hi()-执行的目标方法-" + signature.getName());
+    }
+
+

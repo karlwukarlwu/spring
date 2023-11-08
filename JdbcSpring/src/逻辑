@@ -1,0 +1,23 @@
+1. 通过商品id 获取价格.
+2. 购买商品(某人购买商品，修改用户的余额.)
+3. 修改库存量
+4. 其实大家可以看到，这时，我们需要涉及到三张表商品表，用户表，商品存量表。应
+该使用事务处理
+    传统编程事务
+        Connection connection = JdbcUtils.getConnection();
+        try {
+        //1. 先设置事务不要自动提交
+            connection.setAutoCommit(false);
+        //2. 进行各种crud
+        //多个表的修改，添加，删除
+            select from 商品表=> 获取价格
+        修改用户余额update ...
+        修改库存量update
+        //3. 提交
+            connection.commit();
+        } catch (Exception e) {
+        //4. 回滚
+            conection.rollback();
+        }
+
+声明式事务

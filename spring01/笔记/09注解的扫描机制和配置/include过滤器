@@ -1,0 +1,14 @@
+<!--
+        需求：如果我们希望按照自己的规则，来扫描包/子包下的某些注解, 可以通过 include-filter
+        1. use-default-filters="false" 表示不使用默认的过滤机制/扫描机制
+                默认机制是全扫描 现在用了include 就取消掉全扫描
+        2. context:include-filter 表示要去扫描哪些类
+        3. type="annotation" 按照注解方式来扫描/过滤
+        4. expression="org.springframework.stereotype.Service" 指定要扫描的注解的全路径
+    -->
+
+    <context:component-scan base-package="com.hspedu.spring.component" use-default-filters="false">
+       <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+       <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+       <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>

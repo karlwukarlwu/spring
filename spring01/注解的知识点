@@ -1,0 +1,70 @@
+Java注解（Annotations）是Java 5引入的一种元数据形式，它允许在代码中添加信息，这些信息可以在运行时通过反射进行访问，或者由编译器、IDE和其他工具在编译时使用。注解不直接影响程序的操作，但它们可以被用来提供信息给那些会进行分析和处理注解的工具。
+
+Java注解可以用来：
+- 提供编译时的类型检查
+- 生成代码、XML文件等
+- 在运行时处理，例如通过反射获取注解信息来指导逻辑
+
+注解有几种类型：
+1. **内建注解**：Java自带了一组内建注解，例如 `@Override`，`@Deprecated` 和 `@SuppressWarnings`。
+2. **元注解**：用来注解其他注解的注解，例如 `@Target`，`@Retention`，`@Inherited` 和 `@Documented`。
+3. **自定义注解**：用户可以自定义注解来提供特定于应用程序的元数据。
+
+### 内建注解
+
+- `@Override`：表明子类的一个方法预期重写父类中的方法。
+- `@Deprecated`：标记已经不推荐使用的方法或类。
+- `@SuppressWarnings`：指示编译器忽略特定的警告。
+
+### 元注解
+
+- `@Target`：指示注解可以用在哪些Java元素上面，例如类、方法或变量。
+- `@Retention`：指示注解保留到哪个阶段，可以是源代码(`SOURCE`)、类文件(`CLASS`)或运行时(`RUNTIME`)。
+- `@Inherited`：指示注解可以被子类继承。
+- `@Documented`：指示应将注解包含在JavaDoc中。
+
+### 自定义注解
+
+自定义注解的创建需要使用`@interface`关键字，并可以选择性地添加元注解来指定其行为：
+
+```java
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyCustomAnnotation {
+    String value() default "default";
+    int number() default 0;
+}
+```
+
+在上面的例子中，`MyCustomAnnotation` 是一个带有两个成员的自定义注解。其保留策略被设置为运行时，这意味着它不仅被保存在编译后的.class文件中，而且还可以通过反射在运行时访问。
+
+### 使用注解的例子
+
+```java
+public class MyClass {
+
+    @Override
+    public String toString() {
+        return "MyClass{}";
+    }
+
+    @Deprecated
+    public void doSomethingOldWay() {
+        // ...
+    }
+
+    @MyCustomAnnotation(value = "example", number = 99)
+    public void doSomethingNewWay() {
+        // ...
+    }
+}
+```
+
+在上面的代码中：
+- `toString` 方法被标记为 `@Override`，表明它覆盖了父类（Object类）的 `toString` 方法。
+- `doSomethingOldWay` 方法被标记为 `@Deprecated`，表明它不再推荐使用。
+- `doSomethingNewWay` 方法使用了自定义的 `@MyCustomAnnotation` 注解，并且提供了注解的属性值。
+
+注解可以提供给后续的处理步骤，比如编译器、代码分析工具、框架等，它们会根据注解提供的信息来执行特定的处理。

@@ -1,0 +1,24 @@
+Java的类加载器有三种
+    韩顺平Java 工程师
+    Bootstrap 类加载器--------------对应路径jre/lib
+    Ext 类加载器--------------------对应路径jre/lib/ext
+    App 类加载器-------------------对应路径classpath
+    当我们运行Java程序的时候
+        我们加载一系列类路径
+        D:\program\hspjdk8\bin\java.exe "-javaagent:D:\program\JavaIDEA
+        2020.2\lib\idea_rt.jar=55992:D:\program\JavaIDEA 2020.2\bin" -Dfile.encoding=UTF-8 -classpath
+        D:\program\hspjdk8\jre\lib\charsets.jar;D:\program\hspjdk8\jre\lib\deploy.jar;D:\program\hspjdk8\jre\lib\
+        ext\access-bridge-64.jar;D:\program\hspjdk8\jre\lib\ext\cldrdata.jar;D:\program\hspjdk8\jre\lib\ext\dnsns.
+        jar;D:\program\hspjdk8\jre\lib\ext\jaccess.jar;D:\program\hspjdk8\jre\lib\ext\jfxrt.jar;D:\program\hspjdk8
+        \jre\lib\ext\localedata.jar;D:\program\hspjdk8\jre\lib\ext\nashorn.jar;D:\program\hspjdk8\jre\lib\ext\sune
+        c.jar;D:\program\hspjdk8\jre\lib\ext\sunjce_provider.jar;D:\program\hspjdk8\jre\lib\ext\sunmscapi.jar;D:\
+        program\hspjdk8\jre\lib\ext\sunpkcs11.jar;D:\program\hspjdk8\jre\lib\ext\zipfs.jar;D:\program\hspjdk8\jr
+        e\lib\javaws.jar;D:\program\hspjdk8\jre\lib\jce.jar;D:\program\hspjdk8\jre\lib\jfr.jar;D:\program\hspjdk8\jr
+        e\lib\jfxswt.jar;D:\program\hspjdk8\jre\lib\jsse.jar;D:\program\hspjdk8\jre\lib\management-agent.jar;D:\p
+        rogram\hspjdk8\jre\lib\plugin.jar;D:\program\hspjdk8\jre\lib\resources.jar;D:\program\hspjdk8\jre\lib\rt.j
+        ar;D:\java_projects\hsp-myspring\target\classes com.hspedu.spring.AppMain
+
+        但是最后我们运行的类 实在输出的文件夹下面
+            这也就我们所拿到的真实类路径
+        D:\java_projects\hsp-myspring\target\classes\com\hspedu\spring
+        （这些路径是从文稿是拷贝的 实际根据开发环境来说）

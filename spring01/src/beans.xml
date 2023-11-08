@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+<!--级联赋值-->
+    <bean class="bean.Dept" id="dept"></bean>
+    <bean class="bean.Emp" id="emp">
+        <property name="name" value="张三"/>
+        <property name="dept" ref="dept"/>
+        <!--给属性的属性赋值 级联赋值-->
+        <property name="dept.name" value="java"/>
+    </bean>
+
+    <util:list id="myBookList">
+        <value>三国演义</value>
+        <value>红楼梦</value>
+        <value>西游记</value>
+        <value>水浒传</value>
+    </util:list>
+    <bean class="bean.BookStore" id="bookStore01">
+        <property name="bookList" ref="myBookList"/>
+    </bean>
+<!--    嵌套内部bean-->
+    <bean class="service.MemberServiceImpl" id="memberService2">
+        <property name="memberDAO">
+        <bean class="dao.MemberDAOImpl" ></bean>
+        </property >
+    </bean>
+<!--    bean之间的引用-->
+    <bean class="dao.MemberDAOImpl" id = "memberDAO"></bean>
+    <bean class="service.MemberServiceImpl" id="memberService">
+        <property name="memberDAO" ref="memberDAO"/>
+    </bean>
+
+
+    <bean class="bean.Monster" id="monster01">
+<!--    <bean class="bean.Monster" >-->
+        <property name="monsterId" value="100"/>
+        <property name="name" value="牛魔王"/>
+        <property name="skill" value="芭蕉扇"/>
+    </bean>
+    <bean class="bean.Monster" id="monster02">
+        <property name="monsterId" value="100"/>
+        <property name="name" value="牛魔王2"/>
+        <property name="skill" value="芭蕉扇2"/>
+    </bean>
+    <bean class="bean.Cat" id="cat01">
+        <property name="catId" value="100"/>
+        <property name="name" value="喵喵喵"/>
+        <property name="price" value="3"/>
+    </bean>
+</beans>

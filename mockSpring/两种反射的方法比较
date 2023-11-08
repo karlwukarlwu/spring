@@ -1,0 +1,38 @@
+一句话总结
+    首选 Class<?> aClass = Class.forName(String className) 进行类的反射
+
+在Java中，` Class<?> aClass = Class.forName(String className)` 和 ` Class<?> aClass = ClassLoader.loadClass(String className)` 都可以用来加载类，并且返回一个`Class`对象的引用，它们之间有一些重要的区别：
+                完整版
+                ClassLoader classLoader =
+                HspApplicationContext.class.getClassLoader()
+                Class<?> aClass = ClassLoader.loadClass(String className)
+1. **初始化行为**:
+   - `Class.forName(className)` 不仅会将类加载进内存，还会对类进行初始化，执行静态代码块。
+   - `ClassLoader.loadClass(className)` 只会加载类到内存中，不会执行类的初始化代码。类的初始化将在第一次使用时进行（如新建实例、访问静态字段等）。
+
+2. **使用上下文类加载器**:
+   - `Class.forName(className)` 默认使用调用者的类加载器来加载目标类。
+   - `ClassLoader.loadClass(className)` 需要明确指定一个`ClassLoader`实例来加载类。如果你想使用特定的类加载器或是在不同的类加载环境（如OSGi平台）中工作，这个方法会非常有用。
+
+3. **异常处理**:
+   - `Class.forName(className)` 抛出的是`ClassNotFoundException`，当类路径上没有对应的类时。
+   - `ClassLoader.loadClass(className)` 也抛出`ClassNotFoundException`。
+
+4. **重载版本**:
+   - `Class.forName()` 有一个重载版本`Class.forName(className, boolean initialize, ClassLoader loader)`，它允许你指定是否初始化类以及使用的类加载器。
+   - `ClassLoader.loadClass()` 没有此类重载，它总是尝试使用调用`loadClass`方法的实例来加载类。
+
+在实际使用中，`Class.forName()` 因为可以初始化类，所以通常用在需要立即执行类中静态块的场合，例如JDBC驱动的加载。而`ClassLoader.loadClass()` 则更多用于那些对类加载过程有特殊需求的场合。
+
+示例代码：
+
+```java
+// 使用Class.forName()加载并初始化类
+Class<?> clazzForName = Class.forName("com.example.MyClass");
+
+// 使用ClassLoader.loadClass()加载但不初始化类
+ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+Class<?> clazzLoadClass = classLoader.loadClass("com.example.MyClass");
+```
+
+在多数应用场景中，这两种方式的差异对于日常使用可能不是很明显，但是在涉及复杂的类加载器层次结构，或者在模块化系统（如OSGi、JavaEE容器等）中，这些差异会变得重要。

@@ -1,0 +1,23 @@
+ UserDao userDao = ioc.getBean(UserDao.class);
+        //在默认情况下, 注解标识的类创建对象后，在容器中，id 为类名的首字母小写
+//        意思是你不用注解配置value属性，也会默认给你一个id 就是类名首字母小写
+        UserDao userDao1 = ioc.getBean("userDao", UserDao.class);
+
+
+
+使用注解的话 value的值会变成id的值
+    /**
+     * @author 韩顺平
+     * @version 1.0
+     * 使用 @Repository 标识该类是一个Repository是一个持久化层的类/对象
+     *
+     * 老师解读
+     * 1. 标记注解后，类名首字母小写作为id的值(默认)
+     * 2. value = "hspUserDao" 使用指定的 hspUserDao作为UserDao对象的id
+     */
+     //
+    @Repository/*(value = "hspUserDao")*/
+    public class UserDao {
+    }
+    //使用注解的话 value的值会变成id的值
+    UserDao userDao1 = ioc.getBean("hspUserDao", UserDao.class);

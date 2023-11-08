@@ -1,0 +1,37 @@
+   <!--配置Monster对象，并且指定构造器
+
+    老师解读
+    1. constructor-arg标签可以指定使用构造器的参数
+    2. index表示构造器的第几个参数 从0开始计算的
+    3. 除了可以通过index 还可以通过 name / type 来指定参数方式
+    -->
+
+    <bean id="monster03" class="com.hspedu.spring.bean.Monster">
+        <constructor-arg value="200" index="0"/>
+        <constructor-arg value="白骨精" index="1"/>
+        <constructor-arg value="吸人血" index="2"/>
+    </bean>
+
+    <bean id="monster04" class="com.hspedu.spring.bean.Monster">
+        <constructor-arg value="200" name="monsterId"/>
+        <constructor-arg value="白骨精" name="name"/>
+        <constructor-arg value="吸人血" name="skill"/>
+    </bean>
+
+// 这个会去找那个构造器，参数类型是Integer, String, String 通过参数类型 保证唯一
+    4. 解除大家的疑惑, 类的构造器，不能有完全相同类型和顺序的构造器，所以可以通过type来指定
+
+    <bean id="monster05" class="com.hspedu.spring.bean.Monster">
+        <constructor-arg value="300" type="java.lang.Integer"/>
+        <constructor-arg value="白骨精~" type="java.lang.String"/>
+        <constructor-arg value="吸人血~" type="java.lang.String"/>
+    </bean>
+
+
+    这里需要提供指定构造器
+     这个是Monster类 省略了get/set方法和空参构造器
+        public class Monster {
+            private Integer monsterId;
+            private String name;
+            private String skill;
+         }

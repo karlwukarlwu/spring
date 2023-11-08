@@ -1,0 +1,15 @@
+   <!--配置MemberDAOImpl对象-->
+  
+    <bean class="com.hspedu.spring.service.MemberServiceImpl" id="memberService">
+        <property name="memberDAO" ref="memberDAO"/>
+    </bean>
+    
+     <bean class="com.hspedu.spring.dao.MemberDAOImpl" id="memberDAO"/>
+    
+    先引用后加载 会不会报错
+        不会报错 
+        因为spring是先全部加载 再调用set方法
+        等于是先全部调用无参构造器 
+            再调用set方法
+            这一步是调用set方法加载
+             <property name="memberDAO" ref="memberDAO"/>

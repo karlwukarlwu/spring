@@ -1,0 +1,52 @@
+当你使用反射调用方法时，如果类中有多个方法参数相同但是名字不同，`declaredMethod.invoke()` 的行为将完全依赖于你如何选择和调用这些方法。
+
+下面是一个例子，来说明这个问题：
+
+```java
+public class TestClass {
+    public void printMessage(String message) {
+        System.out.println("Message: " + message);
+    }
+
+    public void showText(String text) {
+        System.out.println("Text: " + text);
+    }
+}
+```
+
+在这个例子中，`TestClass` 有两个方法：`printMessage` 和 `showText`。这两个方法都接受一个 `String` 类型的参数。现在我们用反射来调用这些方法：
+
+```java
+import java.lang.reflect.Method;
+
+public class ReflectionExample {
+    public static void main(String[] args) {
+        try {
+            Class<?> clazz = Class.forName("TestClass");
+            Object instance = clazz.newInstance();
+
+            Method printMethod = clazz.getMethod("printMessage", String.class);
+            Method showMethod = clazz.getMethod("showText", String.class);
+
+            printMethod.invoke(instance, "Hello from printMessage!");
+            showMethod.invoke(instance, "Hello from showText!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+在这个例子中，我们首先获取 `TestClass` 的 `Class` 对象，并创建了一个实例。然后我们分别获取 `printMessage` 和 `showText` 方法的 `Method` 对象，并使用 `invoke` 方法调用它们。
+
+运行这段代码将输出：
+
+```
+Message: Hello from printMessage!
+Text: Hello from showText!
+```
+
+可以看到，尽管这两个方法的参数类型相同，但我们能够通过方法名准确地定位并调用它们。所以，`declaredMethod.invoke()` 的结果完全取决于你是如何获取 `Method` 对象的，以及你是如何调用它的。
+
+总结，当你使用反射调用方法时，即使参数相同，不同名字的方法也被认为是完全不同的方法，你需要通过方法名来准确地获取和调用它们。

@@ -1,0 +1,26 @@
+    //老师说明 @Resource
+    //1) @Resource有两个属性是比较重要的,分是name和type,Spring将@Resource注解的name属性解析为bean的名字,
+    //  而type属性则解析为bean的类型.所以如果使用name属性,则使用byName的自动注入策略,
+    //  而使用type属性时则使用byType自动注入策略
+    //  比如@Resource(name = "userService") 表示装配 id=userService对对象
+//    @Resource(name = "userService")
+//    private UserService u123;
+    //  比如@Resource(type = UserService.class) 表示按照UserService.class类型进行装配,
+    //      这时要求容器中，只能有一个这样类型的对象
+//    @Resource(type = UserService.class)
+//    private UserService userService;
+    //2) 如果@Resource 没有指定 name 和 type ,则先使用byName注入策略, 直接拿属性名当name
+    //   如果匹配不上, 再使用byType策略, 如果都不成功，就会报错
+
+@Controller
+public class UserAction {
+ //  如果@Resource 没有指定 name 和 type ,则先使用byName注入策略, 直接拿属性名当name
+     @Resource
+        private UserService userService;
+
+        public void sayOk() {
+            System.out.println("UserAction 的sayOk()");
+            System.out.println("userAction 装配的 userService属性=" + userService);
+            userService.hi();
+        }
+}

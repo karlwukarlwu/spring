@@ -1,0 +1,77 @@
+1) 前置通知：@Before
+        /**
+         * 老师解读
+         * 1. @Before 表示前置通知:即在我们的目标对象执行方法前执行
+         * 2. value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float)
+         *      指定切入到哪个类的哪个方法  形式是: 访问修饰符 返回类型 全类名.方法名(形参列表)
+         * 3. showBeginLog方法可以理解成就是一个切入方法, 这个方法名是可以程序员指定  比如:ABC
+         * 4. JoinPoint joinPoint 可以获得方法的签名, 方法名, 参数列表
+         */
+        //@Before(value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float))")
+        public void showBeginLog(JoinPoint joinPoint) {
+            //通过连接点对象joinPoint 可以获取方法签名
+            Signature signature = joinPoint.getSignature();
+        }
+
+
+2) 返回通知：@AfterReturning
+          //返回通知：即把showSuccessEndLog方法切入到目标对象方法正常执行完毕后的地方
+            //老韩解读
+            //1. 如果我们希望把目标方法执行的结果，返回给切入方法
+            //2. 可以再 @AfterReturning 增加属性 , 比如 returning = "res"
+            //3. 同时在切入方法增加 Object res
+            //4. 注意: returning = "res" 和 Object res 的 res名字一致
+            //      类似于拿到以后给另一个方法赋值 所以要求参数一致
+            //使用切入点的写法
+            @AfterReturning(value = "myPointCut()", returning = "res")
+            public void showSuccessEndLog(JoinPoint joinPoint, Object res) {
+                Signature signature = joinPoint.getSignature();
+            }
+3) 异常通知：@AfterThrowing
+         //异常通知：即把showExceptionLog方法切入到目标对象方法执行发生异常的的catch{}
+            //@AfterThrowing(value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float))", throwing = "throwable")
+            //直接使用切入点表达式
+            @AfterThrowing(value = "myPointCut()", throwing = "throwable")
+            public void showExceptionLog(JoinPoint joinPoint, Throwable throwable) {
+                Signature signature = joinPoint.getSignature();
+                System.out.println("SmartAnimalAspect-切面类showExceptionLog()-方法执行异常-日志-方法名-" + signature.getName() + " 异常信息=" + throwable);
+            }
+
+4) 后置通知：@After（等于是最后的finally）
+     //最终通知：即把showFinallyEndLog方法切入到目标方法执行后(不管是否发生异常,都要执行 finally{})
+        //@After(value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float))")
+        //直接使用切入点
+        @After(value = "myPointCut()")
+        public void showFinallyEndLog(JoinPoint joinPoint) {
+            Signature signature = joinPoint.getSignature()
+        }
+
+5) 环绕通知：@Around
+这个看看即可
+     //演示环绕通知的使用-了解
+        //老师解读
+        //1. @Around: 表示这是一个环绕通知[完成其它四个通知的功能]
+        //2. value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float)) 切入点表达式
+        //3. doAround 表示要切入的方法 - 调用结构 try-catch-finally
+        @Around(value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float))")
+        public Object doAround(ProceedingJoinPoint joinPoint) {//那个JoinPoint的子类 就用这个 规定好的
+            Object result = null;
+            String methodName = joinPoint.getSignature().getName();
+            try {
+                //1.相当于前置通知完成的事情
+                Object[] args = joinPoint.getArgs();
+                List<Object> argList = Arrays.asList(args);
+                System.out.println("AOP环绕通知[-前置通知]" + methodName + "方法开始了--参数有：" + argList);
+                //在环绕通知中一定要调用joinPoint.proceed()来执行目标方法
+                result = joinPoint.proceed();
+                //2.相当于返回通知完成的事情
+                System.out.println("AOP环绕通知[-返回通知]" + methodName + "方法结束了--结果是：" + result);
+            } catch (Throwable throwable) {
+                //3.相当于异常通知完成的事情
+                System.out.println("AOP环绕通知[-异常通知]" + methodName + "方法抛异常了--异常对象：" + throwable);
+            } finally {
+                //4.相当于最终通知完成的事情
+                System.out.println("AOP环绕通知[-后置通知]" + methodName + "方法最终结束了...");
+            }
+            return result;
+        }

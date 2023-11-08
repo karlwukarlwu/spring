@@ -1,0 +1,14 @@
+组件注解的形式有
+1. @Component 表示当前注解标识的是一个组件
+2. @Controller 表示当前注解标识的是一个控制器，通常用于Servlet
+3. @Service 表示当前注解标识的是一个处理业务逻辑的类，通常用于Service 类
+4. @Repository 表示当前注解标识的是一个持久化层的类，通常用于Dao 类
+在springMVC中会有细分 spring中这几个注解差不多
+
+    Spring 的IOC 容器不能检测一个使用了@Controller 注解的类到底是不是一个真正的控
+    制器。注解的名称是用于程序员自己识别当前标识的是什么组件。其它的@Service
+    @Repository 也是一样的道理[也就是说spring 的IOC 容器只要检查到注解就会生成对象，
+    但是这个注解的含义spring 不会识别，注解是给程序员编程方便看的]
+
+默认情况：标记注解后，类名首字母小写作为id 的值。也可以使用注解的value 属性
+指定id 值，并且value 可以省略.

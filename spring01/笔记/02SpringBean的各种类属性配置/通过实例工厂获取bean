@@ -1,0 +1,64 @@
+实例工厂类
+    区别静态工厂 这里是普通代码块执行初始化
+    造一个对象运行一次 次次对象是独立的
+public class MyInstanceFactory {
+    private Map<String, Monster> monster_map;
+
+    //通过普通代码块进行初始化
+    {
+        monster_map = new HashMap<>();
+        monster_map.put("monster03", new Monster(300, "牛魔王~", "芭蕉扇~"));
+        monster_map.put("monster04", new Monster(400, "狐狸精~", "美人计~"));
+    }
+
+    //写一个方法返回Monster对象
+    public Monster getMonster(String key) {
+        return monster_map.get(key);
+    }
+}
+配置文件
+     <!--配置2个实例工厂对象-->
+        <bean class="com.hspedu.spring.factory.MyInstanceFactory" id="myInstanceFactory"/>
+        <bean class="com.hspedu.spring.factory.MyInstanceFactory" id="myInstanceFactory2"/>
+        <!--配置monster对象, 通过实例工厂
+        老韩解读
+        1. factory-bean 指定使用哪个实例工厂对象返回bean
+        2. factory-method 指定使用实例工厂对象的哪个方法返回bean
+        3. constructor-arg value="monster03" 指定获取到实例工厂中的哪个monster
+        -->
+        //同一个实例工厂返回的同id的bean是同一个对象
+        <bean id="my_monster02" factory-bean="myInstanceFactory" factory-method="getMonster">
+            <constructor-arg value="monster03"/>
+        </bean>
+
+        <bean id="my_monster03" factory-bean="myInstanceFactory" factory-method="getMonster">
+            <constructor-arg value="monster03"/>
+        </bean>
+        //不同的实例工厂返回的同id的bean是不同的对象
+        <bean id="my_monster041" factory-bean="myInstanceFactory2" factory-method="getMonster">
+            <constructor-arg value="monster03"/>
+        </bean>
+
+
+
+//测试类
+    //通过实例工厂获取bean
+      @Test
+      public void getBeanByInstanceFactory() {
+
+          ApplicationContext ioc =
+                  new ClassPathXmlApplicationContext("beans.xml");
+
+          Monster my_monster02 = ioc.getBean("my_monster02", Monster.class);
+          //老韩要考察一把, 看看你是否理解
+          Monster my_monster03 = ioc.getBean("my_monster03", Monster.class);
+          Monster my_monster04 = ioc.getBean("my_monster041", Monster.class);
+          System.out.println("my_monster02=" + my_monster02);
+          System.out.println("my_monster03=" + my_monster03);
+          System.out.println("my_monster041=" + my_monster04);
+          //同一个对象返回的同一个类型
+          System.out.println(my_monster02 == my_monster03);//true
+          //不同的对象返回的是不同的类型
+          System.out.println(my_monster02 == my_monster04);//false
+
+      }

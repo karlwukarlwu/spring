@@ -1,0 +1,63 @@
+在Java中，类对象是`java.lang.Class` 类的一个实例。每个类都被JVM加载后都有一个唯一的`Class`对象产生。这个`Class`对象包含了与类相关的元信息，如类的名称、父类、实现的接口、方法、字段等。
+
+**类对象的获取**：
+
+1. 使用 `.class` 语法。
+
+    ```java
+    Class<String> stringClass = String.class;
+    ```
+
+2. 通过调用对象的 `getClass()` 方法。
+
+    ```java
+    String s = "Hello";
+    Class<?> sClass = s.getClass();
+    ```
+
+3. 使用 `Class.forName()` 静态方法动态加载类并获取类对象。
+
+    ```java
+    Class<?> c = Class.forName("java.lang.String");
+    ```
+
+**类对象的作用**：
+
+1. **反射**：类对象是反射的起点。你可以使用类对象来创建类的实例、调用方法、获取和设置字段值等。
+
+    ```java
+    Class<?> clazz = Class.forName("java.lang.String");
+    Method method = clazz.getMethod("length");
+    Integer length = (Integer) method.invoke("Hello");
+    ```
+
+2. **获取类型信息**：你可以检查类的类型信息，例如它的成员变量、方法、构造器等。
+
+    ```java
+    Field[] fields = clazz.getFields();
+    Constructor<?>[] constructors = clazz.getConstructors();
+    ```
+
+3. **类型检查**：你可以使用类对象来检查对象是否是某个类的实例。
+
+    ```java
+    if(sClass.isInstance(s)) {
+        System.out.println("s is an instance of String");
+    }
+    ```
+
+4. **获取注解**：可以获取类上使用的注解。
+
+    ```java
+    Annotation[] annotations = clazz.getAnnotations();
+    ```
+
+**类对象的特点**：
+
+- **唯一性**：对于每个加载到JVM中的类，都会有且仅有一个`Class`对象产生。
+- **不可变性**：`Class`对象本身是不可变的，即它的元信息在运行时不会被改变。
+- **类型安全**：`Class`对象给出的信息是类型安全的。通过`Class`对象可以准确地知道方法和字段的类型。
+
+在JVM内部，`Class`对象的存在是必要的，因为它用于支持Java的运行时类型识别，即Java的反射机制和类型检查。这也是为什么我们说Java具有丰富的运行时类型信息（RTTI）。
+
+类对象在Java编程中非常有用，尤其是在需要泛型和反射时，或者在使用框架如Spring和Hibernate这些依赖于大量反射和类型检查的库时。

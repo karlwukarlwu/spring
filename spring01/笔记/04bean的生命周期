@@ -1,0 +1,95 @@
+bean 对象创建是由JVM 完成的，然后执行如下方法
+    1. 执行 构造器
+    2. 执行所有的 set 相关方法
+    3. 调用bean 的初始化的方法（需要配置）(init)
+    4. 使用bean
+    5. 当容器关闭时候，调用bean 的销毁方法（需要配置）
+
+以house为例
+    1. 执行构造器  public House()
+    2. 执行set 相关方法    public void setName(String name)
+    3. 调用bean 的初始化的方法（需要配置）  public void init()
+    4. 使用bean
+    5. 当容器关闭时候，调用bean 的销毁方法（需要配置） public void destroy()
+
+
+配置的写法
+       <!--配置House对象，演示整个Bean的生命周期
+       老师解读
+       1. init-method="init" 指定bean的初始化方法 , 在setter方法后执行
+       2. init方法执行的时机，有spring容器来控制
+       3. destroy-method="destroy" 指定bean的销毁方法, 在容器关闭的时候执行
+            这样关闭容器
+                    @Test
+                    public void testBeanLife() {
+                        ApplicationContext ioc =
+                                new ClassPathXmlApplicationContext("beans.xml");
+                //
+                        House house = ioc.getBean("house", House.class);
+                        House2 house2 = ioc.getBean("house2", House2.class);
+
+                        System.out.println("使用house=" + house);
+                        System.out.println("使用house2=" + house2);
+
+                        //关闭容器
+                        //2. ioc的编译类型 ApplicationContext , 运行类型 ClassPathXmlApplicationContext
+                        //3. 因为ClassPathXmlApplicationContext 实现了 ConfigurableApplicationContext
+                        //4. ClassPathXmlApplicationContext 是有close
+                        //5. 将ioc 转成ClassPathXmlApplicationContext,再调用close
+                        // 实际上就是转回一开始的运行类型
+                        //ioc.close();
+                        //关闭ioc容器.
+                        ((ClassPathXmlApplicationContext) ioc).close();
+
+                    }
+
+       4. destroy方法执行的时机，有spring容器来控制
+       -->
+       <bean class="com.hspedu.spring.bean.House" id="house"
+             init-method="init"
+             destroy-method="destroy">
+           <property name="name" value="北京豪宅"/>
+       </bean>
+
+类的写法
+    public class House {
+        private String name;
+
+        public House() {
+            System.out.println("House() 构造器...");
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            System.out.println("House setName()=" + name);
+            this.name = name;
+        }
+
+        //老师解读
+        //1. 这个方法是程序员来编写的.
+        //2. 根据自己的业务逻辑来写.
+        public void init() {
+            System.out.println("House init()..");
+        }
+
+        //老师解读
+        //1. 这个方法是程序员来编写的.
+        //2. 根据自己的业务逻辑来写.
+        //3. 名字也不是固定的
+        public void destroy() {
+            System.out.println("House destroy()..");
+        }
+
+        @Override
+        public String toString() {
+            return "House{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+
+

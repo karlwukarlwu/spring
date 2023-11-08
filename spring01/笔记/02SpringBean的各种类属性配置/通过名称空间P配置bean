@@ -1,0 +1,18 @@
+ <!--通过p名称空间来配置bean
+        老韩解读
+        1. 将光标放在p , 输入alt+enter , 就会自动的添加xmlns
+        2. 有时需要多来几次
+    -->
+    <bean id="monster06" class="com.hspedu.spring.bean.Monster"
+    //p是名称空间的缩写
+          p:monsterId="500"
+          p:name="红孩儿"
+          p:skill="吐火"
+    />
+
+    这个是Monster类 省略了get/set方法和空参构造器
+    public class Monster {
+        private Integer monsterId;
+        private String name;
+        private String skill;
+     }

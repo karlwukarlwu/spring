@@ -1,0 +1,20 @@
+
+//关于CusSpringApplicationContext拿到文件路径的一些说明
+//    为什么要这么费劲
+//    以课堂代码为例
+//    我们配置的注解是这样的@ComponentScan("com.hspedu.spring.component")
+//    但是我们拿到的路径是这样的D:\hspedu_spring\spring\out\production\spring\com\hspedu\spring\component
+//    我们反射的拿到的类路径是在out目录下 ，结构是这样的C:\Users\23584\Desktop\hsp_daima\Spring\hspedu_spring\spring\out\production\spring\com\hspedu\spring\component\AA.class
+//    而我们需要的路径是这样的com.hspedu.spring.component.AA
+//    进行字符串的各种拼接替换
+//    主体逻辑是
+//    1. 拿到注解的value值
+//    2. 将.替换成/
+//    3. 通过类加载器拿到根目录，在通过注解拿到的扫描路径进行拼接
+//    4. 进行遍历，拿到所有class文件（以.class结尾）
+//    5. 通过以上四步 拿到所有的class文件的名字
+//    6. 再通过和最开始的注解拿到的路径进行拼接，拿到src下面的类的路径
+//    7. 反射，拿到类，判断类是否有我们要的注解
+//    8. 有注解的话，就创建对象，放入map中
+//和xml那个版本的区别
+//    那个直接配置好了每个类的路径 不用这么麻烦，找个主要是只写了要扫描的文件夹的注解 我们需要遍历文件夹找到既是class结尾，又有我们要的注解的文件

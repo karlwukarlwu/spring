@@ -1,0 +1,37 @@
+使用场景（省略了空参）
+当一个bean调用另一个bean的时候 我们想给属性的bean赋值
+
+public class MemberServiceImpl {
+    private MemberDAOImpl memberDAO;
+
+public class MemberDAOImpl{
+}
+
+当我们有两个class相互引用的时候 可以用ref来进行嵌套
+
+    1. ref="memberDAO"表示  MemberServiceImpl对象属性memberDAO引用的对象是id=memberDAO
+        的对象
+        2. 这里就体现出spring容器的依赖注入
+        3. 注意再spring容器中, 他是作为一个整体来执行的, 即如果你引用到一个bean对象, 对你配置的顺序没有要求
+        4. 建议还是按顺序，好处是阅读的时候，比较方便
+    -->
+
+当MemberServiceImpl 调用 作为属性的 MemberDAOImpl的时候
+    1、需要提供空参构造器和get set方法（这个很重要）
+    2、在配置文件中配置
+   //外部声名
+        <bean class="dao.MemberDAOImpl" id = "memberDAO"></bean>
+        <bean class="service.MemberServiceImpl" id="memberService>">
+            <property name="memberDAO" ref="memberDAO"></property>
+        </bean>
+
+bean的内部嵌套
+
+和ref相似 但是不是引用bean的id 而是直接内部嵌套一个bean
+
+         <bean class="service.MemberServiceImpl" id="memberService2">
+         //内部声名
+                <property name="memberDAO">
+                <bean class="dao.MemberDAOImpl" ></bean>
+                </property >
+            </bean>

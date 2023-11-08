@@ -1,0 +1,50 @@
+先调用构造器创建对象实例，然后再通过setter方法设置属性。
+这时候要区分是否有ref
+    没有ref
+            <bean class="com.hspedu.spring.bean.House" id="house"
+                  init-method="init"
+                  destroy-method="destroy">
+                <property name="name" value="北京豪宅"/>
+            </bean>
+            <bean class="com.hspedu.spring.bean.House2" id="house2"
+                  init-method="init"
+                  destroy-method="destroy">
+                <property name="name" value="北京豪宅2"/>
+            </bean>
+            加载顺序
+                House() 构造器...
+                House setName()=北京豪宅
+                House init()..
+                House2() 构造器...
+                House2 setName()=北京豪宅2
+                House2 init()..
+    有ref
+           <bean class="com.hspedu.spring.service.MemberServiceImpl" id="memberService" init-method="init">
+               <property name="memberDAO" ref="memberDAO"/>
+           </bean>
+           <bean class="com.hspedu.spring.dao.MemberDAOImpl" id="memberDAO" init-method="init">
+               <property name="name" value="jack"/>
+           </bean>
+
+        加载顺序
+           MemberServiceImpl() 构造器被执行
+               MemberDAOImpl() 构造器被执行...
+               MemberDAOImpl()的setName()=jack
+               MemberDAOImpl init()...
+           MemberServiceImpl中的setMemberDAO()...
+           MemberServiceImpl init()...
+
+
+这个过程可以简单概括为以下几个步骤：
+
+1. **实例化**：Spring容器首先调用类的构造器或工厂方法来创建对象实例。
+
+2. **填充属性**：接下来，容器通过setter方法或者通过直接访问字段来设置属性值。如果这些属性是对其他Bean的引用，Spring容器将确保这些被引用的Bean先被实例化并初始化。
+
+3. **初始化**：之后，容器调用初始化方法（如果有的话）来完成初始化过程。
+
+4. **使用**：现在，Bean已经准备好被应用程序使用了。
+
+5. **销毁**：最后，当容器关闭时，容器调用销毁方法（如果有的话）来清理资源。
+
+所以，总结来说，对象实例的创建（通过调用构造器）是发生在属性设置之前的。

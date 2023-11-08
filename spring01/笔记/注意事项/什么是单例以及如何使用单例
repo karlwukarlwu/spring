@@ -1,0 +1,55 @@
+spring语境下的单例
+    配置一个bean对象 ioc容器只会生成一个bean实例
+
+单例的例子
+    好的，下面我将给出一个使用单例模式的简单例子：一个简单的日志记录器。
+
+    首先，我们定义一个日志记录器的单例类：
+
+    ```java
+    public class Logger {
+        private static Logger instance;
+
+        private Logger() {
+            // 私有构造方法，防止外部直接实例化
+        }
+
+        public static Logger getInstance() {
+            if (instance == null) {
+                instance = new Logger();
+            }
+            return instance;
+        }
+
+        public void log(String message) {
+            System.out.println(message);
+        }
+    }
+    ```
+
+    然后，我们在其他类中引用并使用这个日志记录器：
+
+    ```java
+    public class Application {
+        public static void main(String[] args) {
+            Logger logger = Logger.getInstance();
+            logger.log("This is a log message.");
+        }
+    }
+    ```
+
+    在这个例子中，`Logger` 类是一个单例，它提供了一个 `log` 方法来打印日志消息。在 `Application` 类的 `main` 方法中，我们通过 `Logger` 类的 `getInstance` 方法获取日志记录器的实例，并使用它来打印一条日志消息。
+
+    运行 `Application` 类的 `main` 方法，你将看到 "This is a log message." 被打印到控制台。这说明我们成功地创建了一个日志记录器的单例，并在应用程序中使用了它。
+
+    这个例子非常简单，但它清晰地展示了如何定义一个单例类，以及如何在其他地方引用和使用这个单例。在实际应用中，单例模式通常用于更复杂的场景，如配置管理、资源池等。
+
+单例的实际意义
+    一个类只对应一个对象
+        在单例模式中，Logger.getInstance() 方法的目的就是确保整个应用程序中只有一个 Logger 实例。不管你调用多少次 Logger.getInstance()，它都会返回同一个 Logger 实例。
+
+        在 Logger 类中，我们使用了一个静态变量 instance 来存储单例实例，并在 getInstance() 方法中检查这个变量。如果 instance 为 null，说明还没有创建 Logger 实例，getInstance() 方法会创建一个新的实例。如果 instance 已经不是 null，说明已经有一个 Logger 实例存在了，getInstance() 方法直接返回这个已经存在的实例。
+
+        这样，无论你调用多少次 Logger.getInstance()，都只会有一个 Logger 实例被创建，并且每次调用都会返回这个相同的实例。
+
+        这是单例模式的一个核心特点：整个应用程序共享一个实例，而不是每次调用都创建一个新的对象。这有助于节省资源并提升性能，特别是对于那些创建开销较大的对象来说。

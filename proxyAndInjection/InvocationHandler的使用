@@ -1,0 +1,67 @@
+不用管第一个参数 那个参数没什么用
+    `InvocationHandler` 是 Java 反射包中的一个接口，用于提供一个统一的调用处理程序，它是Java动态代理机制的一部分。在动态代理中，你创建一个实现某些给定接口的代理实例，而`InvocationHandler`就是用来处理这些接口方法调用的。
+
+    当一个代理实例的方法被调用时，这个调用会被转发到实现了`InvocationHandler`接口的实例的`invoke`方法。使用动态代理的主要目的是在不改变原有代码的情况下，能够插入额外的操作，例如添加日志、安全检查、事务处理、延迟加载等。
+
+    `InvocationHandler`接口定义如下：
+
+    ```java
+    package java.lang.reflect;
+
+    public interface InvocationHandler {
+        public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable;
+    }
+    ```
+
+    这里是怎么使用`InvocationHandler`的简单例子：
+
+    1. **定义接口**：
+       首先，你需要有一个接口，代理类将会实现这个接口的方法。
+
+       ```java
+       public interface MyInterface {
+           void doSomething();
+           void somethingElse(String arg);
+       }
+       ```
+
+    2. **实现InvocationHandler**：
+       接着，创建一个实现`InvocationHandler`的类。
+
+       ```java
+       public class MyInvocationHandler implements InvocationHandler {
+           private Object target;
+
+           public MyInvocationHandler(Object target) {
+               this.target = target;
+           }
+
+           @Override
+           public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+               // 你可以在转发前后添加额外的处理逻辑
+               System.out.println("Before method call");
+               Object result = method.invoke(target, args);
+               System.out.println("After method call");
+               return result;
+           }
+       }
+       ```
+
+    3. **创建代理实例**：
+       最后，使用`Proxy`类和你的`InvocationHandler`来动态创建一个代理实例。
+
+       ```java
+       MyInterface target = new MyInterfaceImplementation();
+       InvocationHandler handler = new MyInvocationHandler(target);
+
+       MyInterface proxy = (MyInterface) Proxy.newProxyInstance(
+           MyInterface.class.getClassLoader(),
+           new Class<?>[] {MyInterface.class},
+           handler
+       );
+       ```
+
+    在上面的代码中，`proxy`是`MyInterface`接口的一个代理实例。当你调用`proxy`上的任何方法时，实际上是调用了`MyInvocationHandler`中的`invoke`方法。在`invoke`方法里，你可以在调用目标方法`method.invoke(target, args)`之前或之后添加你的自定义处理逻辑。
+
+    通过这种方式，`InvocationHandler`提供了一种灵活的方式来动态地处理方法调用，使得你可以在运行时构建一个能够代理一组接口方法的类的实例。这是AOP（面向切面编程）在Java中的基础之一。

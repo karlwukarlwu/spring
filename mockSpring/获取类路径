@@ -1,0 +1,18 @@
+在Java中，获取类加载路径可以通过几种方式，这里讲解一些常见的方法：
+
+基本上这两个扫描好用 用这两个
+
+1. 通过类加载器（ClassLoader）获取资源的路径：
+   ```java
+   URL classpathURL = MyClass.class.getClassLoader().getResource("");
+   System.out.println("Classpath URL is " + classpathURL);
+   ```
+   传递一个空字符串给 `getResource` 方法将返回类路径的根位置。
+
+2. 获取具体资源的路径，可以用类的 `getResource` 方法：
+   ```java
+   URL resourceURL = MyClass.class.getResource("/config.properties");
+   System.out.println("Resource URL is " + resourceURL);
+   ```
+   如果你传递的是一个以 `/` 开头的路径，它将从类路径根目录开始搜索资源。如果没有 `/`，它将从该类所在的包开始搜索。
+

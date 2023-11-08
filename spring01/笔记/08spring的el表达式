@@ -1,0 +1,114 @@
+spring的expression language
+    自己去找对应的方法和表达式即可
+    SpEL 使用#{…}作为定界符，所有在大框号中的字符都将被认为是SpEL 表达式。
+
+    <!--配置一个monster对象-->
+    <bean id="monster01" class="com.hspedu.spring.bean.Monster">
+        <property name="monsterId" value="100"/>
+        <property name="name" value="蜈蚣精~"/>
+        <property name="skill" value="蜇人~"/>
+    </bean>
+
+    <!-- spring el 表达式使用
+     老师解读
+     1. 通过spel给bean的属性赋值
+     -->
+    <bean id="spELBean" class="com.hspedu.spring.bean.SpELBean">
+        <!-- sp el 给字面量 -->
+        <property name="name" value="#{'韩顺平教育'}"/>
+        <!-- sp el 引用其它bean -->
+        <property name="monster" value="#{monster01}"/>
+        <!-- sp el 引用其它bean的属性值 -->
+        <property name="monsterName" value="#{monster01.name}"/>
+        <!-- sp el 调用普通方法(返回值)  赋值 -->
+        <property name="crySound" value="#{spELBean.cry('喵喵的..')}"/>
+        <!-- sp el 调用静态方法(返回值) 赋值 -->
+        <property name="bookName" value="#{T(com.hspedu.spring.bean.SpELBean).read('天龙八部')}"/>
+        <!-- sp el 通过运算赋值 -->
+        <property name="result" value="#{89*1.2}"/>
+    </bean>
+
+
+    对应的spELBean
+    public class SpELBean {
+
+        private String name;
+        private Monster monster;
+        private String monsterName;
+        private String crySound; //叫声
+        private String bookName;
+        private Double result;
+
+        public SpELBean() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Monster getMonster() {
+            return monster;
+        }
+
+        public void setMonster(Monster monster) {
+            this.monster = monster;
+        }
+
+        public String getMonsterName() {
+            return monsterName;
+        }
+
+        public void setMonsterName(String monsterName) {
+            this.monsterName = monsterName;
+        }
+
+        public String getCrySound() {
+            return crySound;
+        }
+
+        public void setCrySound(String crySound) {
+            this.crySound = crySound;
+        }
+
+        public String getBookName() {
+            return bookName;
+        }
+
+        public void setBookName(String bookName) {
+            this.bookName = bookName;
+        }
+
+        public Double getResult() {
+            return result;
+        }
+
+        public void setResult(Double result) {
+            this.result = result;
+        }
+
+        //cry 方法会返回字符串
+        public String cry(String sound) {
+            return "发出 " + sound + "叫声...";
+        }
+
+        //read 返回字符串
+        public static String read(String bookName) {
+            return "正在看 " + bookName;
+        }
+
+        @Override
+        public String toString() {
+            return "SpELBean{" +
+                    "name='" + name + '\'' +
+                    ", monster=" + monster +
+                    ", monsterName='" + monsterName + '\'' +
+                    ", crySound='" + crySound + '\'' +
+                    ", bookName='" + bookName + '\'' +
+                    ", result=" + result +
+                    '}';
+        }
+    }

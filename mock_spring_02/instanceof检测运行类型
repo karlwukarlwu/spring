@@ -1,0 +1,15 @@
+在Java中，`instanceof`关键字用于检测一个对象是否为一个特定类或其任何父类的实例。如果您定义了两个类，`Animal` 和 `Dog`，其中 `Dog` 继承自 `Animal`，并且您创建了一个 `Dog` 类的实例，但将其引用类型声明为 `Object`，如下所示：
+
+```java
+Object o1 = new Dog();
+```
+
+那么 `o1` 的编译时类型是 `Object`，它是Java中所有类的最终父类。而 `o1` 的运行时类型是 `Dog`，因为它实际指向的是一个 `Dog` 类的对象。
+
+当您使用 `instanceof` 操作符检查 `o1` 是否为 `Animal` 类的实例时：
+
+```java
+boolean result = o1 instanceof Animal;
+```
+
+这个表达式将会评估为 `true`，因为 `o1` 引用的对象（即 `Dog` 的一个实例）是 `Animal` 的一个实例，或者说是 `Animal` 类型的子类实例。在Java的继承层次中，子类的对象总是也是其父类的实例。所以，即使 `o1` 的引用类型是 `Object`，运行时它指向的对象仍然是 `Dog`（也因此是 `Animal`）的一个实例。

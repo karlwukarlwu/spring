@@ -1,0 +1,32 @@
+xml配置文件
+    需要扫描的包（还是扫描有注释的）
+     <context:component-scan
+                base-package="com.hspedu.spring.aop.aspectj"/>
+
+        <!-- 开启基于注解的AOP功能 -->
+    <!--    区别于之前的没有开启注解-->
+        <aop:aspectj-autoproxy/>
+
+被扫描的文件夹下
+    切面类的配置 只有有了这个才是切面编程
+        可以有多个切面类 拿order排列顺序
+/**
+    * @Order(value = 1) 表示优先级,值越小,优先级越高(这个可以省略)
+    * @Aspect 表示是一个切面类[底层切面编程的支撑(动态代理+反射+动态绑定...)]
+    * @Component 会注入SmartAnimalAspect到容器
+    */
+@Order(value = 1) //表示优先级,值越小,优先级越高
+@Aspect //表示是一个切面类[底层切面编程的支撑(动态代理+反射+动态绑定...)]
+@Component //会注入SmartAnimalAspect到容器
+public class SmartAnimalAspect3 {
+}
+
+@order的执行顺序类似于filter
+    1.执行order小的的before
+    2.执行order大的的before
+    3.执行目标方法
+    4.执行order大的的after
+    5.执行order小的的after
+
+
+

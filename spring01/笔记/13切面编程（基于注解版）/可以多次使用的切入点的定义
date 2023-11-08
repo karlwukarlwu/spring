@@ -1,0 +1,16 @@
+    //定义一个切入点, 在后面使用时可以直接引用, 提高了复用性
+//    官方定义的这么写 记下来即可
+//  我切入表达式的写法单独提一篇写
+//  这里知道是  形式是: 访问修饰符 返回类型 全类名.方法名(形参列表) 即可
+    @Pointcut(value = "execution(public float com.hspedu.spring.aop.aspectj.SmartDog.getSum(float, float)))")
+    public void myPointCut() {
+    }
+
+    切入点的使用
+    @Before(value = "myPointCut()")//简化了上面的那一大长串
+        public void showBeginLog(JoinPoint joinPoint) {
+            //通过连接点对象joinPoint 可以获取方法签名
+            Signature signature = joinPoint.getSignature();
+            System.out.println("SmartAnimalAspect-切面类showBeginLog()[使用的myPointCut()]-方法执行前-日志-方法名-" + signature.getName() + "-参数 "
+                    + Arrays.asList(joinPoint.getArgs()));
+        }

@@ -1,0 +1,16 @@
+spring是一组技术
+    这里用的是spring 5.3.8 （等11月底学新的）
+
+需要的包
+beans context core expression
+
+反射的bean 一定需要无参构造器和get set方法
+
+src下面放容器配置xml文件 xml config-> spring config
+但是实际上运行的是out下面的xml文件
+
+ioc会拿到xml文件中的bean的属性和类路径，把定义信息保存到map中beanDefinitionMap
+
+
+
+

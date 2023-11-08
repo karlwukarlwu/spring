@@ -1,0 +1,35 @@
+当我们使用代理类的时候 会产生很多横切关注点
+    我们可以通过在横切关注点 调用外界方法 从而降低程序复杂度
+        这时引入ASPECTJ
+            spring AOP
+
+        public T getInstance(){
+                ClassLoader classLoader = t.getClass().getClassLoader();
+                Class<?>[] interfaces = t.getClass().getInterfaces();
+                InvocationHandler invocationHandler = new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        Object invoke = null;
+                        try {
+                            String name = method.getName();
+                            外界方法1
+                            //这里从AOP看，就是一个横切关注点-前置通知
+                            System.out.println("日志-方法名"+name+"参数"+args[0]+"  "+args[1]);
+        //                          这里可以加一个判断然后强转一下类型
+                            invoke = method.invoke(t, args);
+                            外界方法2
+                            //从AOP看, 也是一个横切关注点-返回通知
+                            System.out.println("日志-方法名"+name+"结果"+invoke);
+                        }catch (Exception e){
+                            外界方法3
+                            //从AOP看, 也是一个横切关注点-异常通知
+                            System.out.println("异常"+e.getMessage());
+                        }finally {
+                            外界方法4
+                            //从AOP的角度看, 也是一个横切关注点-最终通知
+                            System.out.println("finally");
+                        }
+
+                        return invoke;
+                    }
+                };

@@ -1,0 +1,12 @@
+ <!--
+        需求：如果我们希望排除某个包/子包下的某种类型的注解，可以通过exclude-filter来指定
+        1. context:exclude-filter 指定要排除哪些类
+        2. type 指定排除方式 annotation表示按照注解来排除
+        3. expression="org.springframework.stereotype.Service" 指定要排除的注解的全路径
+            //意思是不要有Service注解的类
+    -->
+
+    <!--<context:component-scan base-package="com.hspedu.spring.component">-->
+    <!--    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>-->
+    <!--    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>-->
+    <!--</context:component-scan>-->

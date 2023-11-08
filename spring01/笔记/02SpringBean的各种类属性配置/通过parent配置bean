@@ -1,0 +1,22 @@
+需求：两个对象的属性一致怎么办
+
+加上parent即可
+
+    <!--配置Monster对象-->
+    <bean id="monster10" class="com.hspedu.spring.bean.Monster">
+        <property name="monsterId" value="10"/>
+        <property name="name" value="蜈蚣精"/>
+        <property name="skill" value="蜇人"/>
+    </bean>
+
+    <!--
+    老韩解读
+    1. 配置Monster对象
+    2.但是这个对象的属性值和 id="monster10"对象属性一样
+    3.parent="monster10" 指定当前这个配置的对象的属性值从 id=monster10的对象来
+    -->
+
+    <bean id="monster11"
+          class="com.hspedu.spring.bean.Monster"
+          parent="monster10"/>
+

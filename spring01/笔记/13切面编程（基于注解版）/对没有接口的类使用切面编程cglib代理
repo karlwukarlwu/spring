@@ -1,0 +1,32 @@
+如果说我们对一个没有实现接口的类 使用了切面编程会怎么样
+    @Component //把Car作为一个组件[对象]，注入到spring容器
+    public class Car {
+        public void run() {
+            System.out.println("小汽车在running..");
+        }
+    }
+    //切面类
+     @Before(value = "execution(public void Car.run())")
+        public void ok1(JoinPoint joinPoint) {
+
+            Signature signature = joinPoint.getSignature();
+            System.out.println("切面类的ok1()-执行的目标方法-" + signature.getName());
+
+     }
+
+     这样会触发cglib面向父类编程
+         @Test
+            public void test3() {
+                //得到spring容器
+                ApplicationContext ioc =
+                        new ClassPathXmlApplicationContext("beans08.xml");
+                //没实现接口就直接用类名 但是返回的还是代理类（cglib 代理 面向父类 有兴趣可以查查）
+                Car car = ioc.getBean(Car.class);
+                //com.hspedu.spring.aop.aspectj.Car$$EnhancerBySpringCGLIB$$8f69c3c9
+
+                //说明: 返回的car对象仍然是代理对象
+                System.out.println("car的运行类型=" + car.getClass());
+
+                car.run();
+
+            }

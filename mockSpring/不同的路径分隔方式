@@ -1,0 +1,21 @@
+当你使用`ClassLoader`的`loadClass`方法加载类时，应该使用点（`.`）分隔的全类名。这是因为`loadClass`方法的参数预期是一个以点分隔的字符串，这符合Java的全限定类名的常规表示方法。
+
+例如：
+
+```java
+String classFullName = "com.myapp.MyClass";
+Class<?> aClass = classLoader.loadClass(classFullName);
+```
+
+在上面的例子中，`classFullName`是以点分隔的字符串，它代表了类的全路径，其中`com.myapp`是包名，而`MyClass`是类名。
+
+与之对应的，当使用`getResource`或`getResourceAsStream`方法时，你需要使用斜杠（`/`）来分隔路径，因为它们期望的是路径格式，类似于文件系统的路径或URL路径，而不是Java的包名和类名。因此，在使用这些方法时，通常需要将包名中的点替换成斜杠。
+
+例如：
+
+```java
+String resourceName = "/com/myapp/config.properties";
+URL resource = classLoader.getResource(resourceName);
+```
+
+在这个例子中，`resourceName`是一个以斜杠分隔的路径，指向类路径下的资源文件。

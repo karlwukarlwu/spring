@@ -1,0 +1,42 @@
+    <!--配置Cat对象 
+        老师解读
+        1. 在默认情况下 scope属性是 singleton  懒加载是false
+        2. 在ioc容器中, 只会创建一个bean对象
+        3. 当程序员执行getBean时, 请求同一个bean的时候 返回的的是同一个对象
+            //测试Scope
+                @Test
+                public void testBeanScope() {
+
+                    ApplicationContext ioc =
+                            new ClassPathXmlApplicationContext("beans.xml");
+
+                    Cat cat = ioc.getBean("cat", Cat.class);
+                    Cat cat2 = ioc.getBean("cat", Cat.class);
+                    Cat cat3 = ioc.getBean("cat", Cat.class);
+                    System.out.println("cat=" + cat);
+                    System.out.println("cat2=" + cat2);
+                    System.out.println("cat3=" + cat3);
+                    单例情况下这三个相等 多例情况下这三个不等
+
+                }
+        4. 如果我们希望每次getBean返回一个新的Bean对象，则可以scope="prototype"
+        5. 通常情况下, lazy-init 就使用默认值false , 即在容器启动时, 就创建bean对象
+        6. 如果bean的配置是 scope="singleton" lazy-init="true" 这时,ioc容器就不会提前创建该对象
+           , 而是当执行getBean方法的时候，才会创建对象
+        7. 如果scope="prototype" 这时你的lazy-init 属性的值不管是ture, 还是false 都是在
+           getBean 时候，才创建对象.
+
+    -->
+    //多例模式， 默认情况下是singleton
+    //
+    <bean id="cat" class="com.hspedu.spring.bean.Cat" scope="prototype">
+        <property name="id" value="100"/>
+        <property name="name" value="小花猫"/>
+    </bean>
+
+     //单例模式懒加载
+    <!--   👇 这样设置把默认加载关闭了 只有调用才会加载-->
+        <bean id="cat" class="com.hspedu.spring.bean.Cat" scope="singleton" lazy-init="true">
+            <property name="id" value="100"/>
+            <property name="name" value="小花猫"/>
+        </bean>

@@ -1,0 +1,115 @@
+
+Java中的泛型提供了编译时类型安全检测机制，这意味着你可以在编译时期捕捉到非法的类型。泛型的使用使代码更加灵活，减少了需要进行的类型转换的数量。
+
+下面是关于如何在Java中使用泛型的几个基础知识点：
+
+1. **泛型类**：
+    泛型类是在类名后面添加一对尖括号`<>`，里面放置一个类型参数的类。
+
+    ```java
+    public class Box<T> {
+        private T t; // T stands for "Type"
+
+        public void set(T t) {
+            this.t = t;
+        }
+
+        public T get() {
+            return t;
+        }
+    }
+    ```
+
+    要使用这个类，你需要指定一个具体的类型：
+
+    ```java
+    Box<Integer> integerBox = new Box<Integer>();
+    Box<String> stringBox = new Box<String>();
+    ```
+
+2. **泛型方法**：
+    泛型方法是在方法返回类型之前声明一个或多个类型参数的方法。
+
+    ```java
+    public class Util {
+        public static <T> void printArray(T[] array) {
+            for (T element : array) {
+                System.out.print(element + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // 使用
+    Integer[] intArray = {1, 2, 3};
+    Util.<Integer>printArray(intArray);
+    ```
+
+    泛型方法可以是静态的，如上例所示，也可以是非静态的。
+
+3. **泛型接口**：
+    和泛型类一样，泛型接口使用类型参数。类型参数在实现类实现接口时指定。
+
+    ```java
+    public interface Pair<K, V> {
+        public K getKey();
+        public V getValue();
+    }
+
+    public class OrderedPair<K, V> implements Pair<K, V> {
+
+        private K key;
+        private V value;
+
+        public OrderedPair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey()   { return key; }
+        public V getValue() { return value; }
+    }
+
+    // 使用
+    Pair<Integer, String> p1 = new OrderedPair<>(1, "apple");
+    Pair<Integer, String> p2 = new OrderedPair<>(2, "pear");
+    ```
+
+4. **类型通配符**：
+    有时你不知道使用泛型类或泛型方法时具体使用的是什么类型，这时可以使用类型通配符`?`。
+
+    ```java
+    public static void printBox(Box<?> box) {
+        System.out.println(box.get());
+    }
+    ```
+
+    `Box<?>`表示任何类型的Box都是可以接受的。
+
+5. **泛型的类型限定**：
+    你可以限制泛型可以接受的类型，使用`extends`关键字来限定类型参数必须是特定类型的子类型。
+
+    ```java
+    public class Stats<T extends Number> {
+        T[] nums; // array of Number or subclass
+
+        Stats(T[] o) {
+            nums = o;
+        }
+
+        double average() {
+            double sum = 0.0;
+            for(int i=0; i < nums.length; i++) {
+                sum += nums[i].doubleValue();
+            }
+            return sum / nums.length;
+        }
+    }
+    ```
+
+    这里，`Stats`类只接受`Number`或其子类的泛型。
+
+6. **泛型的继承和子类型**：
+    泛型类型的继承规则有点复杂。例如，给定两个泛型类型`Box<Integer>`和`Box<Number>`，尽管`Integer`是`Number`的一个子类型，`Box<Integer>`并不是`Box<Number>`的子类型。
+
+使用泛型的好处很多，它不仅能够让你的代码更加类型安全，还可以减少你的代码中的强制类型转换。不过，需要注意的是，泛型只在编译时强化类型检查，运行时实际上是使用擦除的，这意味着泛型的类型参数会被

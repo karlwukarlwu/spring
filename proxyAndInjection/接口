@@ -1,0 +1,49 @@
+在Java中，接口（Interface）是一个完全抽象的类，它允许定义一组方法，但不提供它们的实现。其目的是被其他类实现（implement）。一个类可以实现多个接口。
+
+### 基本特点：
+
+1. **方法默认为公开抽象的**：接口中的所有方法都是`public abstract`的，即便不显式地指定。
+2. **可以包含常量**：接口可以包含常量，这些常量都是`public static final`的，即便不显式地指定。
+3. **默认方法和静态方法**：从Java 8开始，接口中可以包含默认方法（用`default`关键字修饰）和静态方法（用`static`关键字修饰），这两种方法可以有自己的实现。
+4. **无状态**：由于接口不能含有对象的状态，它不能包含字段（除了静态常量）。
+5. **实现接口**：一个类实现一个接口必须实现接口中所有的方法，除非它是一个抽象类。
+
+### 例子：
+
+```java
+// 一个简单的接口
+public interface Animal {
+    void eat();
+    void travel();
+}
+
+// 实现接口的类
+public class Mammal implements Animal {
+    @Override
+    public void eat() {
+        System.out.println("Mammal eats");
+    }
+
+    @Override
+    public void travel() {
+        System.out.println("Mammal travels");
+    }
+
+    public int noOfLegs() {
+        return 4;
+    }
+}
+
+// 使用接口和类
+public class Main {
+    public static void main(String args[]) {
+        Mammal m = new Mammal();
+        m.eat();
+        m.travel();
+    }
+}
+```
+
+在这个例子中，`Animal`接口定义了两个方法：`eat`和`travel`。`Mammal`类实现了`Animal`接口，因此它必须提供这两个方法的具体实现。
+
+接口是多态性的一种形式，允许你使用多个类的对象以统一的方式。比如，如果你有一个接口的引用，你可以指向实现了该接口的任何类的实例。这就是为什么接口在设计系统时如此有用，因为它们可以用来定义程序中的各种行为和形式，而不需要关心具体的实现细节。

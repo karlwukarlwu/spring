@@ -1,0 +1,24 @@
+这个是两个类的结构(省略了get/set方法，无参构造器)
+
+public class Dept {
+    private String name;
+    }
+
+public class Emp {
+    private String name;
+    private Dept dept;
+}
+我现在希望给Emp赋值 同时给他的属性dept赋值
+    通过级联赋值
+
+
+<!--级联赋值-->
+    <bean class="bean.Dept" id="dept"></bean>
+    <bean class="bean.Emp" id="emp">
+        <property name="name" value="张三"/>
+        <property name="dept" ref="dDept"/>
+        <!--给属性的属性赋值 级联赋值-->
+        <property name="dept.name" value="java"/>
+</bean>
+
+

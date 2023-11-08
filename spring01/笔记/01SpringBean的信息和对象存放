@@ -1,0 +1,19 @@
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("beans.xml");
+通过对这一步的debug
+    beans.xml的配置文件被解析
+1、
+       在beanDefinitionMap中存放的是bean节点的所有配置信息
+            注意：这里是配置信息 不是对象
+       通过key = 我们定义的id 取出
+       value是我们对应的配置信息（属性，属性值，类信息，是不是懒加载）
+       我们可以在propertyValues里面找到 配置信息
+2、
+       在singletonObjects中存放的是对象
+       如果beans的配置设置的是单例 
+            singletonObjects就会存放这个对象
+            注意：对象放在的是这里
+            
+       beanDefinitionNames里面放的是bean的名称
+       
+       
+
